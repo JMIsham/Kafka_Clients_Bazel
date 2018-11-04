@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Properties;
+import java.util.Random;
 
 import org.apache.kafka.clients.producer.Producer;
 
@@ -6,9 +8,10 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 
 import org.apache.kafka.clients.producer.ProducerRecord;
 
-public class Kafka_Producer {
-    public static void main(String[] args) {
+public class Kafka_Producer implements Runnable{
 
+    @Override
+    public void run() {
         String topicName = "sample_topic1";
 
         Properties props = new Properties();
@@ -22,13 +25,34 @@ public class Kafka_Producer {
         props.put("key.serializer","org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
 
-        Producer<String, String> producer = new KafkaProducer<>(props);
+        ArrayList<String> logs = new ArrayList<>();
+        logs.add("log:search: ");
+        logs.add("log:Login:");
+        logs.add("log:Logout:");
+        logs.add("log:Register: ");
+        logs.add("log:Buy: ");
 
-        for(int i = 0; i < 10; i++)
+
+        Producer<String, String> producer = new KafkaProducer<>(props);
+        int i;
+        long startingTime  = System.currentTimeMillis();
+        for(i=0 ; i < 10000; i++) {
+            Random r = new Random();
+            int pos = r.nextInt(5);
+            String message = logs.get(pos);
+            message += System.currentTimeMillis();
             producer.send(new ProducerRecord<String, String>(topicName,
-                    Integer.toString(i), Integer.toString(i)));
-        System.out.println("Message sent successfully");
+                    message, message));
+//            System.out.println(message);
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        long endTime = System.currentTimeMillis();
+        System.out.println(10000000.0/(endTime - startingTime));
+//        System.out.println("Message sent successfully");
         producer.close();
     }
-
 }
