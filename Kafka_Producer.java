@@ -36,7 +36,13 @@ public class Kafka_Producer implements Runnable{
         Producer<String, String> producer = new KafkaProducer<>(props);
         int i;
         long startingTime  = System.currentTimeMillis();
-        for(i=0 ; i < 10000; i++) {
+
+        String message1 = logs.get(1);
+        message += System.currentTimeMillis();
+        producer.send(new ProducerRecord<String, String>(topicName,
+                message1, message1));
+
+        for(i=0 ; i < 9998; i++) {
             Random r = new Random();
             int pos = r.nextInt(5);
             String message = logs.get(pos);
@@ -50,6 +56,12 @@ public class Kafka_Producer implements Runnable{
                 e.printStackTrace();
             }
         }
+
+        String message2 = logs.get(1);
+        message += System.currentTimeMillis();
+        producer.send(new ProducerRecord<String, String>(topicName,
+                message2, message2));
+
         long endTime = System.currentTimeMillis();
         System.out.println(10000000.0/(endTime - startingTime));
 //        System.out.println("Message sent successfully");
