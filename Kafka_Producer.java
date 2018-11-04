@@ -38,7 +38,7 @@ public class Kafka_Producer implements Runnable{
         long startingTime  = System.currentTimeMillis();
 
         String message1 = logs.get(1);
-        message += System.currentTimeMillis();
+        message1 += System.currentTimeMillis();
         producer.send(new ProducerRecord<String, String>(topicName,
                 message1, message1));
 
@@ -58,7 +58,7 @@ public class Kafka_Producer implements Runnable{
         }
 
         String message2 = logs.get(1);
-        message += System.currentTimeMillis();
+        message2 += System.currentTimeMillis();
         producer.send(new ProducerRecord<String, String>(topicName,
                 message2, message2));
 
